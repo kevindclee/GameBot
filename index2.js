@@ -34,10 +34,16 @@ function createMessage(assistant, assistant_id, session_id, input_message){
 function messageThen(message, is_final){
     message.then(res => {
         console.log(JSON.stringify(res.result, null, 2)); // for checking JSON response from Watson
-        //response = res.result.output.generic[0].text.toString();
-        //console.log("Watson Assistant response: " + response);
-        //intent = res.result.output.intents[0].intent.toString();
-        //console.log("Recognized intent as: " + intent);
+        let generic = res.result.output.generic
+        var i;
+        let response = '';
+        for(i = 0; i<generic.length; i++){
+            response = response.concat(generic[i].text.toString() + '\n');
+        }
+        console.log("Watson Assistant response: " + response);
+
+        //@@@@@@@@@@@@@@@@@@@@@@@TODO: response Watson create div
+
         if(is_final){
             assistant.deleteSession({
                 assistantId: assistant_id,
@@ -50,7 +56,10 @@ function messageThen(message, is_final){
                     console.log(err);
                 })
             ; // end of delete session
+
         }else{
+            //@@@@@@@@@@@@@@@@@@@@@@@TODO: read in user input and create div
+
             //user_input = getInput();
             //readline.question("Enter input: ", user_input => { console.log("Input message: " + user_input); readline.close();});
             //readline.question("Is this final?: ", is_final => { console.log("Is final: " + is_final); readline.close(); });

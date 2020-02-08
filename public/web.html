@@ -1,0 +1,96 @@
+
+
+<!DOCTYPE html>
+<!--Retrived from:https://www.w3schools.com/howto/howto_css_split_screen.asp -->
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="theme.css">
+   </head>
+   <body>
+      <!--left for chat box -->
+      <div class = "split left">
+         <h2>CHAT</h2>
+         <!-- upper half for chat history -->
+         <div class="chat-scroll" id="autoScroll">
+            <div class="container">
+               <img src="robot.png" alt="Avatar">
+               <p>Hi, I am Steve Boxwell. I am here to recommend you some games. What's your favorite game you have played before?</p>
+               <span class="time-right">11:00</span>
+            </div>
+         </div>
+         <!-- lower half for chat input box -->
+         <div class="chat-box">
+            <div class="container chat">
+               <form action="/action_page.php">
+                  <input id="input-box" type="text" name="chat">
+                  <input type="button" onclick="window.location.href = 'web2.html';" value="Enter"/>
+                  <input type="button" onclick="window.location.href = 'web.html';" value="Restart"/>
+               </form>
+	       <button class="btn"><img src="mic.png" alt="Avatar" align="center"></button>
+            </div>
+         </div>
+      </div>
+      <!-- javaScript to auto scroll to bottom -->
+      <script>
+         var objDiv = document.getElementById("autoScroll");
+         objDiv.scrollTop = objDiv.scrollHeight;
+      </script>
+      <!--right for game page -->
+      <div class="split right">
+         <!-- top slide-->
+         <div class="slideshow-container">
+            <div class="mySlides fade">
+               <div class="numbertext">1 / 3</div>
+               <img src="images/destiny-2-season-of-dawn-homepage-marquee-desktop-01-ps4-05dec19-en-us.jpg" style="width:100%">
+            </div>
+            <div class="mySlides fade">
+               <div class="numbertext">2 / 3</div>
+               <img src="images/dragon-ball-z-kakarot-homepage-marquee-desktop-01-ps4-10jan20-ja-jp.jpg" style="width:100%">
+            </div>
+            <div class="mySlides fade">
+               <div class="numbertext">3 / 3</div>
+               <img src="images/ghost-of-tsuhima-marquee-12dec19.jpg" style="width:100%">
+            </div>
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+         </div>
+         <br>
+         <div style="text-align:center">
+            <span class="dot" onclick="currentSlide(1)"></span> 
+            <span class="dot" onclick="currentSlide(2)"></span> 
+            <span class="dot" onclick="currentSlide(3)"></span> 
+         </div>
+         <script>
+            var slideIndex = 1;
+            showSlides(slideIndex);
+            
+            function plusSlides(n) {
+              showSlides(slideIndex += n);
+            }
+            
+            function currentSlide(n) {
+              showSlides(slideIndex = n);
+            }
+            
+            function showSlides(n) {
+              var i;
+              var slides = document.getElementsByClassName("mySlides");
+              var dots = document.getElementsByClassName("dot");
+              if (n > slides.length) {slideIndex = 1}    
+              if (n < 1) {slideIndex = slides.length}
+              for (i = 0; i < slides.length; i++) {
+                  slides[i].style.display = "none";  
+              }
+              for (i = 0; i < dots.length; i++) {
+                  dots[i].className = dots[i].className.replace(" active", "");
+              }
+              slides[slideIndex-1].style.display = "block";  
+              dots[slideIndex-1].className += " active";
+            }
+         </script>
+         
+      </div>
+   </body>
+</html>
+
+

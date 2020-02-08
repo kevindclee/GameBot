@@ -1,77 +1,48 @@
-const AssistantV2 = require('ibm-watson/assistant/v2');
-const { IamAuthenticator } = require('ibm-watson/auth');
+const http = require('http');
+const path = require('path');
+const fs = require('fs');
 
+const server = http.createServer((req, res) => {
+    /*
+    if(req.url === '/'){
+        fs.readFile(path.join(__dirname, 'public', 'web.html'), (err, content) => {
+            if(err) throw err;
+            res.writeHead(200, {'Content-Type': 'text/html'});
+            res.end(content);
+        })
+    }*/
+    // Build fie path
+    let filePath = path.join(__dirname, 'public', req.url === '/' ? 'web.html' : req.url);
+    console.log(filePath);
+    res.end();
 
-let api_key = 'mQm5M8FKoDrr6kHa2egihXw9Y7p1XvyoEEjPdRKoyd1f'; //Bowen's
-let url = 'https://api.us-south.assistant.watson.cloud.ibm.com/instances/8332649b-5341-4b1d-acd7-d09c5dca8c97'; //Bowen's
-let assistant_id = '62dfbaa1-b17c-4bfa-8693-5c3be0e12d19'; //Bowen's
+    // Extension of file
+    let extname = path.extname(filePath);
 
-/*
-let api_key = 'PMDpVBUyLC7XpKV-N9hUSmvaY6cWUkEKlXtd3apcOCxh';
-let url = 'https://api.us-south.assistant.watson.cloud.ibm.com/instances/b730816f-f905-4b51-94bc-e0b83114e73d';
-let assistant_id = 'ffa3c0ac-2506-402f-a3c5-a3ee89c9eb10';
-*/
+    //Initial content type
+    let conetentType = 'text/html';
+    switch (extname){
+        case '.js':
+            conetentType = 'text/javascript';
+            break;
+        case '.css':
+            conetentType = 'text/css';
+            break;
+        case '.json':
+            conetentType = 'application/json';
+            break;
+        case '.png':
+            conetentType = "image/png";
+            break;
+        case '.jpg':
+            conetentType = 'image/jpg';
+            break;
+    }
 
-let session_id = "";
+    
 
-const assistant = new AssistantV2({
-    version: '2019-02-28',
-    authenticator: new IamAuthenticator({
-        apikey: api_key,
-    }),
-    url: url,
 });
 
-assistant.createSession({
-    assistantId: assistant_id
-})
-    .then(res => {
-        console.log(JSON.stringify(res.result, null, 2)); // for checking JSON response from Watson
-        session_id = res.result.session_id.toString();
-        console.log("Session created!, session id: " + session_id);
+const PORT = process.env.PORT || 8000;
 
-        let input_message = "hello";
-        console.log("Input message: " + input_message);
-        let response = "";
-        let intent = "";
-
-        assistant.message({
-            assistantId: assistant_id,
-            sessionId: session_id,
-            input: {
-                'message_type': 'text',
-                'text': input_message
-            }
-        })
-            .then(res => {
-                console.log(JSON.stringify(res.result, null, 2)); // for checking JSON response from Watson
-                response = res.result.output.generic[0].text.toString();
-                console.log("Watson Assistant response: " + response);
-                intent = res.result.output.intents[0].intent.toString();
-                console.log("Recognized intent as: " + intent);
-                    
-                assistant.deleteSession({
-                    assistantId: assistant_id,
-                    sessionId: session_id,
-                })
-                    .then(res => {
-                        console.log("Session deleted!");
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-                ; // end of delete session
-            })
-            .catch(err => {
-                console.log(err);
-            })
-        ; // end of message
-    })
-    .catch(err => {
-        console.log(err);
-    })
-; // end of create session
-
-
-
-
+server.listen(PORT, () => console.log('Server running on port ${PORT}'));

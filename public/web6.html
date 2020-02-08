@@ -1,0 +1,153 @@
+
+
+<!DOCTYPE html>
+<!--Retrived from:https://www.w3schools.com/howto/howto_css_split_screen.asp -->
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="theme.css">
+   </head>
+   <body>
+      <!--left for chat box -->
+      <div class = "split left">
+         <h2>CHAT</h2>
+         <!-- upper half for chat history -->
+         <div class="chat-scroll" id="autoScroll">
+            <div class="container">
+               <img src="robot.png" alt="Avatar">
+               <p>Hi, I am Steve Boxwell. I am here to recommend you some games. What's your favorite game you have played before?</p>
+               <span class="time-right">11:10</span>
+            </div>
+            <div class="container darker">
+               <img src="human.png" alt="Avatar" class="right">
+               <p><b>Civilization V</b></p>
+               <span class="time-left">11:11</span>
+            </div>
+            <div class="container">
+               <img src="robot.png" alt="Avatar">
+               <p>I also love that game! Would you like to see other Civilization games?</p>
+               <span class="time-right">11:12</span>
+            </div>
+         </div>
+         <!-- lower half for chat input box -->
+         <div class="chat-box">
+            <div class="container chat">
+               <form action="/action_page.php">
+                  <input id="input-box" type="text" name="chat">
+                  <input type="button" onclick="window.location.href = 'web7.html';" value="Enter"/>
+                  <input type="button" onclick="window.location.href = 'web5.html';" value="Restart"/>
+               </form>
+	       <button class="btn"><img src="mic.png" alt="Avatar" align="center"></button>
+            </div>
+         </div>
+      </div>
+      <!-- javaScript to auto scroll to bottom -->
+      <script>
+         var objDiv = document.getElementById("autoScroll");
+         objDiv.scrollTop = objDiv.scrollHeight;
+      </script>
+      <!--right for game page -->
+      <div class="split right">
+         <!-- top slide-->
+         <div class="slideshow-container">
+            <div class="mySlides fade">
+               <div class="numbertext">1 / 3</div>
+               <img src="images/destiny-2-season-of-dawn-homepage-marquee-desktop-01-ps4-05dec19-en-us.jpg" style="width:100%">
+            </div>
+            <div class="mySlides fade">
+               <div class="numbertext">2 / 3</div>
+               <img src="images/dragon-ball-z-kakarot-homepage-marquee-desktop-01-ps4-10jan20-ja-jp.jpg" style="width:100%">
+            </div>
+            <div class="mySlides fade">
+               <div class="numbertext">3 / 3</div>
+               <img src="images/ghost-of-tsuhima-marquee-12dec19.jpg" style="width:100%">
+            </div>
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+         </div>
+         <br>
+         <div style="text-align:center">
+            <span class="dot" onclick="currentSlide(1)"></span> 
+            <span class="dot" onclick="currentSlide(2)"></span> 
+            <span class="dot" onclick="currentSlide(3)"></span> 
+         </div>
+         <script>
+            var slideIndex = 1;
+            showSlides(slideIndex);
+            
+            function plusSlides(n) {
+              showSlides(slideIndex += n);
+            }
+            
+            function currentSlide(n) {
+              showSlides(slideIndex = n);
+            }
+            
+            function showSlides(n) {
+              var i;
+              var slides = document.getElementsByClassName("mySlides");
+              var dots = document.getElementsByClassName("dot");
+              if (n > slides.length) {slideIndex = 1}    
+              if (n < 1) {slideIndex = slides.length}
+              for (i = 0; i < slides.length; i++) {
+                  slides[i].style.display = "none";  
+              }
+              for (i = 0; i < dots.length; i++) {
+                  dots[i].className = dots[i].className.replace(" active", "");
+              }
+              slides[slideIndex-1].style.display = "block";  
+              dots[slideIndex-1].className += " active";
+            }
+         </script>
+         <h3 style="color:black">List of Recommendation:</h3>
+
+         
+         <div class="gallery" >
+            <a target="_blank" href="https://www.amazon.com/Sid-Meiers-Civilization-VI-Gathering/dp/B07KSHVRB3/ref=sr_1_4?keywords=civilization+6&qid=1579715411&sr=8-4">
+               <img src="images/91-0Jk2euAL._AC_UY436_QL65_ML3_.jpg" alt="Death" width="500" height="300">
+               <div class="desc">Civilization VI</div>
+            </a>
+         </div>
+         
+         <div class="gallery" >
+            <a target="_blank" href="https://www.amazon.com/Sid-Meiers-Civilization-IV-Complete/dp/B073XSQGKN/ref=sr_1_3?keywords=civilization+4&qid=1579715305&sr=8-3">
+               <img src="images/B1kQDUk1WdS._AC_UY436_QL65_ML3_.jpg" alt="Death" width="500" height="300">
+               <div class="desc">Civilization IV</div>
+            </a>
+         </div>
+
+         <div class="gallery" >
+            <a target="_blank" href="https://www.amazon.com/Tropico-6-PC/dp/B07CBQZ6HK/ref=sr_1_4?keywords=Tropico+6&qid=1579715445&sr=8-4">
+               <img src="images/apps.23390.69821012804453629.875c8c5e-116c-427d-bc2d-50d63ff96366.88815aa9-24f5-45d1-8303-01a9be5ee18d.jpg" alt="Death" width="500" height="300">
+               <div class="desc">Tropoco V</div>
+            </a>
+         </div>
+         <div class="gallery" >
+            <a target="_blank" href="https://www.playstation.com/en-us/games/for-the-king-ps4/">
+               <img src="images/apps.16651.67711513064732812.145475d0-7ca9-46cd-80c8-14a5857a18e2.cd24e81c-f3aa-449d-a3ab-7127f9227ba3.jpg" alt="Death" width="500" height="300">
+               <div class="desc">For the King</div>
+            </a>
+         </div>
+
+         <div class="gallery" >
+            <a target="_blank" href="https://www.playstation.com/en-us/games/hand-of-fate-2-ps4/">
+               <img src="images/apps.7307.14257278821917358.16acb300-28ef-4878-aa81-3657d4ed0e73.030556eb-06cd-46ff-aaaa-5ddcf690f01c.jpg" alt="Death" width="500" height="300">
+               <div class="desc">Hand of Fate2</div>
+            </a>
+         </div>
+
+         <div class="gallery" >
+            <a target="_blank" href="https://www.microsoft.com/en-us/p/darkest-dungeon/bxkvn6g9c5wj?activetab=pivot:overviewtab">
+               <img src="images/apps.33180.63131787694667297.e786edde-5064-499d-9660-f3d7c293ceaa.57b4555b-2b38-4ba8-a158-87aa941960f4.jpg" alt="Death" width="500" height="300">
+               <div class="desc">Darkest Dungeon</div>
+            </a>
+         </div>
+
+         
+
+
+
+      </div>
+   </body>
+</html>
+
+
