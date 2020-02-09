@@ -6,8 +6,6 @@ let url = 'https://api.us-south.assistant.watson.cloud.ibm.com/instances/8332649
 let assistant_id = '62dfbaa1-b17c-4bfa-8693-5c3be0e12d19'; //Bowen's
 */
 
-
-
 let api_key = 'PMDpVBUyLC7XpKV-N9hUSmvaY6cWUkEKlXtd3apcOCxh';
 let url = 'https://api.us-south.assistant.watson.cloud.ibm.com/instances/b730816f-f905-4b51-94bc-e0b83114e73d';
 let assistant_id = 'ffa3c0ac-2506-402f-a3c5-a3ee89c9eb10';
