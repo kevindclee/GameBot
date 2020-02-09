@@ -32,11 +32,11 @@ function createWatsonAssistantSession(){
         let input_message = "hello";
         console.log("Input message: " + input_message);
     
-        message = sendMessage(input_message);
+        message = sendWatsonAssistantMessage(input_message);
     }); // end of create session
 }
 
-function sendMessage(input_message){
+function sendWatsonAssistantMessage(input_message){
     const message =assistant.message({
         assistantId: assistant_id,
         sessionId: session_id,
@@ -58,7 +58,7 @@ function sendMessage(input_message){
     });
 }
 
-function deleteSession(){
+function deleteWatsonAssistnatSession(){
     assistant.deleteSession({
         assistantId: assistant_id,
         sessionId: session_id,
@@ -71,7 +71,7 @@ function deleteSession(){
         }); // end of delete session
 }
 
-
+module.exports = {startSession: createWatsonAssistantSession, sendMessage: sendWatsonAssistantMessage, endSession: deleteWatsonAssistnatSession};
 
 
 
