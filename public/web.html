@@ -7,6 +7,11 @@
       <link rel="stylesheet" type="text/css" href="theme.css">
    </head>
    <body>
+      <script data-main="../assistant.js" src="../require.js">
+         console.log("IM HERE1");
+         createWatsonAssistantSession();   
+         console.log("IM HERE2");
+      </script>
       <!--left for chat box -->
       <div class = "split left">
          <h2>CHAT</h2>
@@ -23,7 +28,7 @@
             <div class="container chat">
                <form action="/action_page.php">
                   <input id="input-box" type="text" name="chat">
-                  <input type="button" onclick="window.location.href = 'web2.html';" value="Enter"/>
+                  <input type="button" onclick="createMessage(" value="Enter"/>
                   <input type="button" onclick="window.location.href = 'web.html';" value="Restart"/>
                </form>
 	       <button class="btn"><img src="mic.png" alt="Avatar" align="center"></button>

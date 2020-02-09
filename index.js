@@ -39,7 +39,15 @@ const server = http.createServer((req, res) => {
             break;
     }
 
-    
+    // read file
+    fs.readFile(filePath, (err, content) => {
+        if(err){
+            if(err.code == 'ENOENT'){
+                //Page not found
+                
+            }
+        }
+    });
 
 });
 
