@@ -11,9 +11,9 @@
       <script>
          console.log("IM HERE1: ");
          myBundle.startSession();  
+         setTimeout(function(){myBundle.sendMessage("PC"); }, 5000);
+         setTimeout(function(){myBundle.endSession();   }, 10000);
          console.log("IM HERE2: ");
-         myBundle.endSession();  
-         console.log("IM HERE3: ");
       </script>
       <!--left for chat box -->
       <div class = "split left">
