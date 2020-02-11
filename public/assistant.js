@@ -75,8 +75,56 @@ function deleteWatsonAssistnatSession(){
         }); // end of delete session
 }
 
-module.exports = {startSession: createWatsonAssistantSession, sendMessage: sendWatsonAssistantMessage, endSession: deleteWatsonAssistnatSession};
+function addChat(){
+    var client_div = document.createElement('div');
+    client_div.setAttribute('class','container darker');
+    var client_img = document.createElement('img');
+    // set attribute to client image
+    client_img.setAttribute('src','human.png');
+   client_img.setAttribute('alt','Avatar');
+   client_img.setAttribute('class','right');
+   client_div.appendChild(client_img);
+   
+   // set up the client_msg
+   var p = document.createElement('p');
+   var b = document.createElement('b');
+   var input = document.getElementById('input-box').value
+   var client_msg = document.createTextNode(input);
+   b.appendChild(client_msg);
+   p.appendChild(b);
+   client_div.appendChild(p);
+   var sp = document.createElement('span');
+   var time = document.createTextNode('11:08');
+   sp.appendChild(time);
+   sp.setAttribute('class','time-left');
+   client_div.appendChild(sp);
+   var current = document.getElementsByClassName('chat-scroll');
+   current[0].appendChild(client_div);
+   document.getElementById('input-box').value=''; // clear the input area
+   
+   // above deals with the chatbox for the user input
+   var assistant_div = document.createElement('div');
+   assistant_div.setAttribute('class','container');
+   // attribute of robot image
+   var assistant_img = document.createElement('img');
+   assistant_img.setAttribute('src','robot.png');
+   assistant_img.setAttribute('alt','Avatar');
+   assistant_div.appendChild(assistant_img);
 
+   var p = document.createElement('p');
+   var next_question= sendWatsonAssistantMessage(input);
 
+   var text = document.createTextNode(next_question);
+   p.appendChild(text);
+   assistant_div.appendChild(p);
+   var sp = document.createElement('span');
+   var time = document.createTextNode('11:08');
+   sp.appendChild(time);
+   sp.setAttribute('class','time-left');
+   assistant_div.appendChild(sp);
 
+   var current = document.getElementsByClassName('chat-scroll');
+   current[0].appendChild(assistant_div);
+}
 
+module.exports = {addChat: addChat, startSession: createWatsonAssistantSession, sendMessage: sendWatsonAssistantMessage, endSession: deleteWatsonAssistnatSession};
