@@ -9,11 +9,7 @@
    <body>
       <script src="bundle.js"></script>
       <script>
-         console.log("IM HERE1: ");
-         myBundle.startSession();  
-         setTimeout(function(){myBundle.sendMessage("PC"); }, 5000);
-         setTimeout(function(){myBundle.endSession();   }, 10000);
-         console.log("IM HERE2: ");
+         myBundle.startSession();
       </script>
       <!--left for chat box -->
       <div class = "split left">
@@ -22,17 +18,18 @@
          <div class="chat-scroll" id="autoScroll">
             <div class="container">
                <img src="robot.png" alt="Avatar">
-               <p>Hi, I am Steve Boxwell. I am here to recommend you some games. What's your favorite game you have played before?</p>
-               <span class="time-right">11:00</span>
+               <p>Hello. This is GameBot.
+                  Let's explore some Games!
+                  Which platform do you prefer to play on?</p>
             </div>
          </div>
          <!-- lower half for chat input box -->
          <div class="chat-box">
             <div class="container chat">
-               <form action="/action_page.php">
+               <form>
                   <input id="input-box" type="text" name="chat">
-                  <input type="button" onclick="window.location.href = 'web2.html';" value="Enter"/>
-                  <input type="button" onclick="window.location.href = 'web.html';" value="Restart"/>
+                  <input type="button" onclick="myBundle.addChat();" value="Enter"/>
+                  <input type="button" onclick="myBundle.endSession();" value="Restart"/>
                </form>
 	       <button class="btn"><img src="mic.png" alt="Avatar" align="center"></button>
             </div>

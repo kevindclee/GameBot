@@ -12,6 +12,8 @@ let assistant_id = 'ffa3c0ac-2506-402f-a3c5-a3ee89c9eb10';
 */
 
 let session_id = "";
+let bot_msg = "";
+let next_question = "";
 
 const assistant = new AssistantV2({
     version: '2019-02-28',
@@ -33,10 +35,10 @@ function createWatsonAssistantSession(){
         let input_message = "hello";
         console.log("Input message: " + input_message);
     
-        message = sendWatsonAssistantMessage(input_message);
-
-        // Asstant;s div : This GameBot
-
+        messege = sendWatsonAssistantMessage(input_message);
+        console.log("Initial message: " + messege);
+        setTimeout(function(){bot_msg = messege;}, 1500);  
+        
     }); // end of create session
 }
 
@@ -56,9 +58,9 @@ function sendWatsonAssistantMessage(input_message){
         let response = '';
         for(i = 0; i<generic.length; i++){
             response = response.concat(generic[i].text.toString() + '\n');
-        }
+        } 
         console.log("Watson Assistant response: " + response);
-        return response;
+        next_question = response;
     });
 }
 
@@ -69,10 +71,24 @@ function deleteWatsonAssistnatSession(){
     })
         .then(res => {
             console.log("Session deleted!");
+            window.location.href = 'web.html';
         })
         .catch(err => {
             console.log(err);
         }); // end of delete session
+}
+
+function addGreeting(){
+    createWatsonAssistantSession();
+    setTimeout(function(){
+        greeting = bot_msg;
+        console.log("GREETING: " + greeting);
+        var p = document.createElement('p');
+        var msg = document.createTextNode(greeting);
+        p.appendChild(msg);
+        var scroll = document.getElementsByClassName('container');
+        scroll[0].appendChild(p);
+    }, 4000);  
 }
 
 function addChat(){
@@ -81,50 +97,68 @@ function addChat(){
     var client_img = document.createElement('img');
     // set attribute to client image
     client_img.setAttribute('src','human.png');
-   client_img.setAttribute('alt','Avatar');
-   client_img.setAttribute('class','right');
-   client_div.appendChild(client_img);
+    client_img.setAttribute('alt','Avatar');
+    client_img.setAttribute('class','right');
+    client_div.appendChild(client_img);
    
-   // set up the client_msg
-   var p = document.createElement('p');
-   var b = document.createElement('b');
-   var input = document.getElementById('input-box').value
-   var client_msg = document.createTextNode(input);
-   b.appendChild(client_msg);
-   p.appendChild(b);
-   client_div.appendChild(p);
-   var sp = document.createElement('span');
-   var time = document.createTextNode('11:08');
-   sp.appendChild(time);
-   sp.setAttribute('class','time-left');
-   client_div.appendChild(sp);
-   var current = document.getElementsByClassName('chat-scroll');
-   current[0].appendChild(client_div);
-   document.getElementById('input-box').value=''; // clear the input area
+    // set up the client_msg
+    var p = document.createElement('p');
+    var b = document.createElement('b');
+    var input = document.getElementById('input-box').value
+    var client_msg = document.createTextNode(input);
+    b.appendChild(client_msg);
+    p.appendChild(b);
+    client_div.appendChild(p);
+    var sp = document.createElement('span');
+    var today = new Date();
+    var timeToday = today.getHours() + ":" + today.getMinutes();
+    var time = document.createTextNode(timeToday);
+    sp.appendChild(time);
+    sp.setAttribute('class','time-left');
+    client_div.appendChild(sp);
+    var current = document.getElementsByClassName('chat-scroll');
+    current[0].appendChild(client_div);
+    document.getElementById('input-box').value=''; // clear the input area
    
-   // above deals with the chatbox for the user input
-   var assistant_div = document.createElement('div');
-   assistant_div.setAttribute('class','container');
-   // attribute of robot image
-   var assistant_img = document.createElement('img');
-   assistant_img.setAttribute('src','robot.png');
-   assistant_img.setAttribute('alt','Avatar');
-   assistant_div.appendChild(assistant_img);
+     // above deals with the chatbox for the user input
+    var assistant_div = document.createElement('div');
+    assistant_div.setAttribute('class','container');
+    // attribute of robot image
+    var assistant_img = document.createElement('img');
+    assistant_img.setAttribute('src','robot.png');
+    assistant_img.setAttribute('alt','Avatar');
+    assistant_div.appendChild(assistant_img);
 
-   var p = document.createElement('p');
-   var next_question= sendWatsonAssistantMessage(input);
+    var p = document.createElement('p');
+    console.log("USER INPUTTTTT: " + input);
+    next_question = sendWatsonAssistantMessage(input);
+    console.log("NEXT QUESTION: " + next_question); 
 
-   var text = document.createTextNode(next_question);
-   p.appendChild(text);
-   assistant_div.appendChild(p);
-   var sp = document.createElement('span');
-   var time = document.createTextNode('11:08');
-   sp.appendChild(time);
-   sp.setAttribute('class','time-left');
-   assistant_div.appendChild(sp);
+    var objDiv = document.getElementById("autoScroll");
+    objDiv.scrollTop = objDiv.scrollHeight;
+    
+    setTimeout(function(){
+        next_question = next_question;    
+        var text = document.createTextNode(next_question);
+        p.appendChild(text);
+        assistant_div.appendChild(p);
+        var sp = document.createElement('span');
+        var today = new Date();
+        var timeToday = today.getHours() + ":" + today.getMinutes();
+        var time = document.createTextNode(timeToday);
+        sp.appendChild(time);
+        sp.setAttribute('class','time-right');
+        assistant_div.appendChild(sp);
+    
+        var current = document.getElementsByClassName('chat-scroll');
+        current[0].appendChild(assistant_div); 
 
-   var current = document.getElementsByClassName('chat-scroll');
-   current[0].appendChild(assistant_div);
+        var objDiv = document.getElementById("autoScroll");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }, 1500);   
+    
+    
+
 }
 
-module.exports = {addChat: addChat, startSession: createWatsonAssistantSession, sendMessage: sendWatsonAssistantMessage, endSession: deleteWatsonAssistnatSession};
+module.exports = {addChat: addChat, addGreeting: addGreeting, startSession: createWatsonAssistantSession, sendMessage: sendWatsonAssistantMessage, endSession: deleteWatsonAssistnatSession};
