@@ -161,7 +161,8 @@ body {
 }
 
 .desc {
-	color: black padding: 20px;
+	color: black;
+	padding: 20px;
 	text-align: center;
 	font-weight: bold;
 }
