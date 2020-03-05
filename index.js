@@ -2,6 +2,18 @@ const http = require('http');
 const path = require('path');
 const fs = require('fs');
 
+/*
+const corsOptions = {
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    preflightContinue: true,
+    maxAge: 600,
+  };
+app.options('*', cors(corsOptions));
+app.use(cors(corsOptions));
+*/
+
 const server = http.createServer((req, res) => {
     // Build fie path
     let filePath = path.join(__dirname, 'public', req.url === '/' ? 'web.html' : req.url);
@@ -44,3 +56,4 @@ const server = http.createServer((req, res) => {
 const PORT = process.env.PORT || 5000;
 
 server.listen(PORT, () => console.log('Server running on port ${PORT}'));
+

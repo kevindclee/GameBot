@@ -20,7 +20,7 @@
                <img src="robot.png" alt="Avatar">
                <p>Hello. This is GameBot.
                   Let's explore some Games!
-                  Which platform do you prefer to play on?</p>
+                  (If you want to make conversation with different language, use "Set Language" button)</p>
             </div>
          </div>
          <!-- lower half for chat input box -->
@@ -30,8 +30,9 @@
                   <input id="input-box" type="text" name="chat">
                   <input type="button" onclick="(async () => { await myBundle.addChat(); })();" value="Enter"/>
                   <input type="button" onclick="(async () => { await myBundle.endSession(); })();" value="Restart"/>
+                  <input type="button" onclick="(async () => { await myBundle.setLanguage(); })();" value="Set Language"/>
                </form>
-	            <button class="btn"><img src="mic.png" alt="Avatar" align="center"></button>
+	            <!--<button class="btn"><img src="mic.png" alt="Avatar" align="center"></button>-->
             </div>
          </div>
       </div>

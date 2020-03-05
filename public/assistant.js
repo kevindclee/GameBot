@@ -14,6 +14,8 @@ let assistant_id = 'ffa3c0ac-2506-402f-a3c5-a3ee89c9eb10';
 let session_id = "";
 let bot_msg = "";
 let next_question = "";
+let language_val = "";
+let is_Google = false;
 
 const assistant = new AssistantV2({
     version: '2019-02-28',
@@ -88,69 +90,6 @@ async function deleteWatsonAssistnatSession(){
     }
 }
 
-async function addGreeting(){
-    try{
-        await createWatsonAssistantSession();
-        greeting = bot_msg;
-        console.log("GREETING: " + greeting);
-        var p = document.createElement('p');
-        var msg = document.createTextNode(greeting);
-        p.appendChild(msg);
-        var scroll = document.getElementsByClassName('container');
-        scroll[0].appendChild(p);
-    }
-    catch (e) {
-        console.log('error', e);
-        return null;
-    }
-}
-
-var platformId = '[48,49,6,130]'
-var genresId = '(11,12,13,14,15,31)'
-
-async function addGames(){
-    try{
-        var request = require('request');
-        //need check respose from assistant to determine which platform
-    
-        var options = {
-          'method': 'POST',
-          'url': 'https://api-v3.igdb.com/games',
-          'headers': {
-            'user-key': '90afd0d7f337b9deafb7e15d5dfa3f62',
-            'Content-Type': 'text/plain'
-          },
-          body: "fields name,popularity,category,platforms,genres;\nwhere category = 0 & platforms = "+platformId+"& genres = "+genresId+" ;sort popularity desc; limit 6;\n"
-    
-        };
-        request(options, function (error, response) {
-          if (error) throw new Error(error);
-          //console.log(response.body);
-          var data = JSON.parse(response.body);
-          console.log(data)
-          console.log(data.length);
-          console.log(data[0].name)
-    
-          //remove before picture
-          var element = document.getElementById("recommendList");
-          element.innerHTML = '';
-          //add game list
-          var i = 0;
-          for (i=0;i<data.length;i++){
-            var node = document.createElement("LI");
-            var textnode = document.createTextNode(data[i].name);
-            node.appendChild(textnode);
-          }
-        });
-
-    }
-    catch (e) {
-        console.log('error', e);
-        return null;
-    }
-
-}
-
 async function addChat(){
     try{
         var client_div = document.createElement('div');
@@ -192,9 +131,20 @@ async function addChat(){
 
         var p = document.createElement('p');
         console.log("USER INPUT: " + input);
+        if(language_val != ""){
+            input = await translate(language_val + "-en", input);
+            if(is_Google == true){
+                input = await translate_Google(language_val, input);
+            }
+        } 
         next_question = await sendWatsonAssistantMessage(input);
-        next_question = next_question;
-        console.log("NEXT QUESTION: " + next_question); 
+        
+        if(language_val != ""){
+            next_question = await translate("en-" + language_val, next_question);
+            if(is_Google == true){
+                next_question = await translateText(language_val, next_question);
+            }
+        } 
 
         var objDiv = document.getElementById("autoScroll");
         objDiv.scrollTop = objDiv.scrollHeight;
@@ -224,4 +174,174 @@ async function addChat(){
     }
 }
 
-module.exports = {addChat: addChat, addGreeting: addGreeting, startSession: createWatsonAssistantSession, sendMessage: sendWatsonAssistantMessage, endSession: deleteWatsonAssistnatSession};
+const LanguageTranslatorV3 = require('ibm-watson/language-translator/v3');
+
+let api_key2 = 'u5CyWhz0rS5u1vsd-WjbiQ5IwOE34Tw4YxeBjDfaDMTh'; 
+let url2 = 'https://api.us-south.language-translator.watson.cloud.ibm.com/instances/1f8350bc-f2bc-4a6d-a1d5-4b49845d6497'; 
+
+const languageTranslator = new LanguageTranslatorV3({
+  version: '2018-05-01',
+  authenticator: new IamAuthenticator({
+    apikey: api_key2,
+  }),
+  url: url2,
+});
+
+async function setLanguage(text){
+    try{
+        var input = document.getElementById('input-box').value
+        identifiedLanguages = await languageTranslator.listIdentifiableLanguages();
+        let languages = identifiedLanguages.result.languages;
+        let lang = ""
+        let name = ""
+        var i;
+        console.log("input = " + input);
+        for(i = 0; i<languages.length; i++){
+            if(input.toLowerCase() == languages[i].name.toString().toLowerCase()){
+                name = languages[i].name.toString().toUpperCase();
+                lang = languages[i].language.toString();
+            }
+        } 
+        let model1 = lang + "-en";
+        let model2 = "en-" + lang;
+        translationModels = await languageTranslator.listModels();
+        let models = translationModels.result.models;
+        let available1 = false;
+        let available2 = false;
+        var i;
+        for(i = 0; i<models.length; i++){
+            if(model1 == models[i].model_id.toString()){
+                available1 = true;
+            }
+            if(model2 == models[i].model_id.toString()){
+                available2 = true;
+            }
+        } 
+        if(available1 == true && available2 == true){
+            language_val = lang;
+            console.log(language_val);
+            // above deals with the chatbox for the user input
+            var assistant_div = document.createElement('div');
+            assistant_div.setAttribute('class','container');
+            // attribute of robot image
+            var assistant_img = document.createElement('img');
+            assistant_img.setAttribute('src','robot.png');
+            assistant_img.setAttribute('alt','Avatar');
+            assistant_div.appendChild(assistant_img);
+    
+            var p = document.createElement('p');
+            let trans = await translate("en-" + lang, "Which platform do you prefer to play on?")
+            var text = document.createTextNode("Language is set to " + name + " " + trans);
+            p.appendChild(text);
+            assistant_div.appendChild(p);
+            var sp = document.createElement('span');
+            var today = new Date();
+            var timeToday = today.getHours() + ":" + today.getMinutes();
+            var time = document.createTextNode(timeToday);
+            sp.appendChild(time);
+            sp.setAttribute('class','time-right');
+            assistant_div.appendChild(sp);
+            
+            var current = document.getElementsByClassName('chat-scroll');
+            current[0].appendChild(assistant_div); 
+    
+            var objDiv = document.getElementById("autoScroll");
+            objDiv.scrollTop = objDiv.scrollHeight;  
+        }else{
+            // above deals with the chatbox for the user input
+            var assistant_div = document.createElement('div');
+            assistant_div.setAttribute('class','container');
+            // attribute of robot image
+            var assistant_img = document.createElement('img');
+            assistant_img.setAttribute('src','robot.png');
+            assistant_img.setAttribute('alt','Avatar');
+            assistant_div.appendChild(assistant_img);
+    
+            var p = document.createElement('p');
+    
+            var text = document.createTextNode("Language not available, try another language or continue with English");
+            p.appendChild(text);
+            assistant_div.appendChild(p);
+            var sp = document.createElement('span');
+            var today = new Date();
+            var timeToday = today.getHours() + ":" + today.getMinutes();
+            var time = document.createTextNode(timeToday);
+            sp.appendChild(time);
+            sp.setAttribute('class','time-right');
+            assistant_div.appendChild(sp);
+            
+            var current = document.getElementsByClassName('chat-scroll');
+            current[0].appendChild(assistant_div); 
+    
+            var objDiv = document.getElementById("autoScroll");
+            objDiv.scrollTop = objDiv.scrollHeight;   
+        }
+    }
+    catch (e) {
+        console.log('error', e);
+        return null;
+    }
+}
+
+async function translate(lang, text){
+    try{
+        const translateParams = {
+          text: text,
+          modelId: lang,
+        };
+        translationResult = await languageTranslator.translate(translateParams);
+        let trans = translationResult.result.translations[0].translation.toString();
+        return trans;
+    }
+    catch (e) {
+        console.log('error', e);
+        return null;
+    }
+}
+
+// Imports the Google Cloud client library
+const {Translate} = require('@google-cloud/translate').v2;
+
+const projectId = 'translate-1583364768180';
+// Instantiates a client
+const translate_Google = new Translate({projectId});
+
+async function translateText(lang, text) {
+
+  try {
+    // Translates some text into Russian
+    const [translation] = await translate_Google.translate(text, lang);
+    console.log(`Text: ${text}`);
+    console.log(`Translation: ${translation}`);
+  } catch (error) {
+    console.error(error.details);
+  }
+}
+
+
+const giantbomb = require('giantbomb');
+const gb = giantbomb('9412c1963be4f5697f6ffc0013f5140a53a73a33');
+async function addGames() {
+    try {
+        // Display details for Mass Effect.
+        gb.games.get(16909, (err, res, json) => {
+          console.log(json.results);
+        });
+        //remove before picture
+        var element = document.getElementById("recommendList");
+        element.innerHTML = '';
+        //add game list
+        var i = 0;
+        for (i=0;i<data.length;i++){
+            var node = document.createElement("LI");
+            var textnode = document.createTextNode(data[i].name);
+            node.appendChild(textnode);
+        }
+    } catch (error) {
+      console.error(error.details);
+    }
+}
+
+
+module.exports = {addGames:addGames, translateText:translateText, setLanguage: setLanguage, translate:translate, addChat: addChat,  
+    startSession: createWatsonAssistantSession, sendMessage: sendWatsonAssistantMessage, endSession: deleteWatsonAssistnatSession};
