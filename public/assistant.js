@@ -16,6 +16,10 @@ let bot_msg = "";
 let next_question = "";
 let language_val = "";
 let is_Google = false;
+let intent_id = 0;
+let name_id = "";
+let is_search = false;
+let is_genre = false;
 
 const assistant = new AssistantV2({
     version: '2019-02-28',
@@ -59,13 +63,32 @@ async function sendWatsonAssistantMessage(input_message){
             }
         });
         console.log(JSON.stringify(message.result, null, 2)); // for checking JSON response from Watson
-        let generic = message.result.output.generic // array of responses
+        let generic = message.result.output.generic; // array of responses
         var i;
         let response = '';
         for(i = 0; i<generic.length; i++){
             response = response.concat(generic[i].text.toString() + '\n');
         } 
         next_question = response;
+        // Platforms { PC: 94, ps3: 35, wii: 90, gamecube: 23, xbox: 32, xbox360: 340 }
+        let intents = message.result.output.intents;
+        if(intents.length != 0){
+            let intent = intents[0].intent;
+            console.log(intent);
+            if(intent == "platform_PC"){
+                console.log("IM IN PC");
+                intent_id = 94;
+            }else if(intent == "platform_ps"){
+                console.log("IM IN PS");
+                intent_id = 35;
+            }else if(intent == "platform_Xbox"){
+                console.log("IM IN XBOX");
+                intent_id = 340;
+            }else if(intent == "platform_Switch"){
+                console.log("IM IN Nintendo");
+                intent_id = 90;
+            }
+        }
         console.log("Watson Assistant response: " + next_question);
         return response;
     }
@@ -133,8 +156,9 @@ async function addChat(){
         console.log("USER INPUT: " + input);
         if(language_val != ""){
             input = await translate(language_val + "-en", input);
+            console.log("USER INPUT: " + input);
             if(is_Google == true){
-                input = await translate_Google(language_val, input);
+                input = await translate(language_val + "-en", input);
             }
         } 
         next_question = await sendWatsonAssistantMessage(input);
@@ -142,7 +166,7 @@ async function addChat(){
         if(language_val != ""){
             next_question = await translate("en-" + language_val, next_question);
             if(is_Google == true){
-                next_question = await translateText(language_val, next_question);
+                next_question = await translate("-en" + language_val, next_question);
             }
         } 
 
@@ -165,8 +189,16 @@ async function addChat(){
 
         var objDiv = document.getElementById("autoScroll");
         objDiv.scrollTop = objDiv.scrollHeight;    
-    
-        addGames();
+
+        if(is_search == false){
+            await addGames(intent_id);
+        }else{
+            if(is_genre == false){
+                await addGamesSearchName(input);
+            }else{
+                await addGamesSearchGenre(input);
+            }
+        }
     }
     catch (e) {
         console.log('error', e);
@@ -189,7 +221,8 @@ const languageTranslator = new LanguageTranslatorV3({
 
 async function setLanguage(text){
     try{
-        var input = document.getElementById('input-box').value
+        var input = document.getElementById('input-box').value;
+        input.innerHTML = '';
         identifiedLanguages = await languageTranslator.listIdentifiableLanguages();
         let languages = identifiedLanguages.result.languages;
         let lang = ""
@@ -307,41 +340,125 @@ const projectId = 'translate-1583364768180';
 const translate_Google = new Translate({projectId});
 
 async function translateText(lang, text) {
-
-  try {
-    // Translates some text into Russian
-    const [translation] = await translate_Google.translate(text, lang);
-    console.log(`Text: ${text}`);
-    console.log(`Translation: ${translation}`);
-  } catch (error) {
-    console.error(error.details);
-  }
+    try {
+        // Translates some text into Russian
+        const [translation] = await translate_Google.translate(text, lang);
+        console.log(`Text: ${text}`);
+        console.log(`Translation: ${translation}`);
+        return text;
+    } catch (error) {
+        console.error(error.details);
+    }
 }
 
+// Platforms { PC: 94, ps3: 35, wii: 90, gamecube: 23, xbox: 32, xbox360: 340 }
 
 const giantbomb = require('giantbomb');
 const gb = giantbomb('9412c1963be4f5697f6ffc0013f5140a53a73a33');
-async function addGames() {
+async function addGames(id) {
     try {
         // Display details for Mass Effect.
-        gb.games.get(16909, (err, res, json) => {
-          console.log(json.results);
+        const config = {
+            fields: ['id', 'name'],
+            page: 1,
+            perPage: 10,
+            sortBy: 'original_game_rating',
+            sortDir: 'desc',
+            filters: [
+              { field: 'platforms', value: id }
+            ]
+        };
+        await gb.games.list(config, (err, res, json) => {
+            console.log("ID: ", id);
+            console.log(json.results);
+            //remove before picture
+            var element = document.getElementById("recommendList");
+            element.innerHTML = '';
+            //add game list
+            var i = 0;
+            for (i=0; i<json.results.length; i++){
+                var node = document.createElement("LI");
+                node.setAttribute('style', "color:black");
+                var textnode = document.createTextNode(json.results[i].name);
+                node.appendChild(textnode);
+                document.getElementById("recommendList").appendChild(node);
+            }
+            is_search = true;
         });
-        //remove before picture
-        var element = document.getElementById("recommendList");
-        element.innerHTML = '';
-        //add game list
-        var i = 0;
-        for (i=0;i<data.length;i++){
-            var node = document.createElement("LI");
-            var textnode = document.createTextNode(data[i].name);
-            node.appendChild(textnode);
-        }
     } catch (error) {
       console.error(error.details);
     }
 }
 
+async function addGamesSearchName(name) {
+    try {
+        // Display details for Mass Effect.
+        const config = {
+            fields: ['id', 'name'],
+            page: 1,
+            perPage: 10,
+            sortBy: 'original_game_rating',
+            sortDir: 'desc',
+            filters: [
+              { field: 'name', value: name },
+              { field: 'platforms', value: intent_id }
+            ]
+        };
+        is_genre = true;
+        name_id = name;
+        await gb.games.list(config, (err, res, json) => {
+            console.log(json.results);
+            //remove before picture
+            var element = document.getElementById("recommendList");
+            element.innerHTML = '';
+            //add game list
+            var i = 0;
+            for (i=0; i<json.results.length; i++){
+                var node = document.createElement("LI");
+                node.setAttribute('style', "color:black");
+                var textnode = document.createTextNode(json.results[i].name);
+                node.appendChild(textnode);
+                document.getElementById("recommendList").appendChild(node);
+            }
+        });
+    } catch (error) {
+      console.error(error.details);
+    }
+}
+
+async function addGamesSearchGenre(genre) {
+    try {
+        const config = {
+            fields: ['id', 'name'],
+            page: 1,
+            perPage: 10,
+            sortBy: 'original_game_rating',
+            sortDir: 'desc',
+            filters: [
+                { field: 'genres', value: genre },
+                { field: 'platforms', value: intent_id },
+                { field: 'names', value: name_id }
+            ]
+        };
+        await gb.games.list(config, (err, res, json) => {
+            console.log(json.results);
+            //remove before picture
+            var element = document.getElementById("recommendList");
+            element.innerHTML = '';
+            //add game list
+            var i = 0;
+            for (i=0; i<json.results.length; i++){
+                var node = document.createElement("LI");
+                node.setAttribute('style', "color:black");
+                var textnode = document.createTextNode(json.results[i].name);
+                node.appendChild(textnode);
+                document.getElementById("recommendList").appendChild(node);
+            }
+        });
+    } catch (error) {
+      console.error(error.details);
+    }
+}
 
 module.exports = {addGames:addGames, translateText:translateText, setLanguage: setLanguage, translate:translate, addChat: addChat,  
     startSession: createWatsonAssistantSession, sendMessage: sendWatsonAssistantMessage, endSession: deleteWatsonAssistnatSession};
