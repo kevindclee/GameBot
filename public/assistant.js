@@ -359,13 +359,13 @@ async function addGames(id) {
     try {
         // Display details for Mass Effect.
         const config = {
-            fields: ['id', 'name'],
+            fields: ['id', 'name','image','site_detail_url'],
             page: 1,
             perPage: 10,
             sortBy: 'original_game_rating',
             sortDir: 'desc',
             filters: [
-              { field: 'platforms', value: id }
+              { field: 'platforms', value: id ,image: 'image'}
             ]
         };
         await gb.games.list(config, (err, res, json) => {
@@ -380,7 +380,20 @@ async function addGames(id) {
                 var node = document.createElement("LI");
                 node.setAttribute('style', "color:black");
                 var textnode = document.createTextNode(json.results[i].name);
+                var img = new Image(); 
+                var a = document.createElement('a');
+                img.src = json.results[i].image.small_url;
+                img.setAttribute("height", "100");
+                img.setAttribute("weight", "100");
+                console.log(json.results[i].site_detail_url);
+                url = json.results[i].site_detail_url
+                a.href = url;
+                a.appendChild(img);
+                //img.onclick = function() {
+                  //window.location.href = url;
+                //};
                 node.appendChild(textnode);
+                node.appendChild(a);
                 document.getElementById("recommendList").appendChild(node);
             }
             is_search = true;
@@ -394,7 +407,7 @@ async function addGamesSearchName(name) {
     try {
         // Display details for Mass Effect.
         const config = {
-            fields: ['id', 'name'],
+            fields: ['id', 'name','image','site_detail_url'],
             page: 1,
             perPage: 10,
             sortBy: 'original_game_rating',
@@ -417,7 +430,20 @@ async function addGamesSearchName(name) {
                 var node = document.createElement("LI");
                 node.setAttribute('style', "color:black");
                 var textnode = document.createTextNode(json.results[i].name);
+                var img = new Image(); 
+                var a = document.createElement('a');
+                img.src = json.results[i].image.small_url;
+                img.setAttribute("height", "100");
+                img.setAttribute("weight", "100");
+                console.log(json.results[i].site_detail_url);
+                url = json.results[i].site_detail_url
+                a.href = url;
+                a.appendChild(img);
+                //img.onclick = function() {
+                  //window.location.href = url;
+                //};
                 node.appendChild(textnode);
+                node.appendChild(a);
                 document.getElementById("recommendList").appendChild(node);
             }
         });
@@ -429,7 +455,7 @@ async function addGamesSearchName(name) {
 async function addGamesSearchGenre(genre) {
     try {
         const config = {
-            fields: ['id', 'name'],
+            fields: ['id', 'name','image','site_detail_url'],
             page: 1,
             perPage: 10,
             sortBy: 'original_game_rating',
@@ -451,7 +477,20 @@ async function addGamesSearchGenre(genre) {
                 var node = document.createElement("LI");
                 node.setAttribute('style', "color:black");
                 var textnode = document.createTextNode(json.results[i].name);
+                var img = new Image(); 
+                var a = document.createElement('a');
+                img.src = json.results[i].image.small_url;
+                img.setAttribute("height", "100");
+                img.setAttribute("weight", "100");
+                console.log(json.results[i].site_detail_url);
+                url = json.results[i].site_detail_url
+                a.href = url;
+                a.appendChild(img);
+                //img.onclick = function() {
+                  //window.location.href = url;
+                //};
                 node.appendChild(textnode);
+                node.appendChild(a);
                 document.getElementById("recommendList").appendChild(node);
             }
         });
