@@ -377,22 +377,28 @@ async function addGames(id) {
             //add game list
             var i = 0;
             for (i=0; i<json.results.length; i++){
-                var node = document.createElement("LI");
+                var node = document.createElement("div");
                 node.setAttribute('style', "color:black");
-                var textnode = document.createTextNode(json.results[i].name);
+                node.setAttribute('class','gallery');
+                //var textnode = document.createTextNode();
                 var img = new Image(); 
                 var a = document.createElement('a');
                 img.src = json.results[i].image.small_url;
-                img.setAttribute("height", "100");
-                img.setAttribute("weight", "100");
+                img.setAttribute("height", "300");
+                img.setAttribute("weight", "500");
                 console.log(json.results[i].site_detail_url);
                 url = json.results[i].site_detail_url
                 a.href = url;
                 a.appendChild(img);
+                var node_name = document.createElement("div");
+                node_name.setAttribute('style', "color:black");
+                var textnode = document.createTextNode(json.results[i].name);
+                node_name.appendChild(textnode);
+                a.appendChild(node_name);
                 //img.onclick = function() {
                   //window.location.href = url;
                 //};
-                node.appendChild(textnode);
+                //node.appendChild(textnode);
                 node.appendChild(a);
                 document.getElementById("recommendList").appendChild(node);
             }
@@ -427,22 +433,28 @@ async function addGamesSearchName(name) {
             //add game list
             var i = 0;
             for (i=0; i<json.results.length; i++){
-                var node = document.createElement("LI");
+                var node = document.createElement("div");
                 node.setAttribute('style', "color:black");
-                var textnode = document.createTextNode(json.results[i].name);
+                node.setAttribute('class','gallery');
+                //var textnode = document.createTextNode();
                 var img = new Image(); 
                 var a = document.createElement('a');
                 img.src = json.results[i].image.small_url;
-                img.setAttribute("height", "100");
-                img.setAttribute("weight", "100");
+                img.setAttribute("height", "300");
+                img.setAttribute("weight", "500");
                 console.log(json.results[i].site_detail_url);
                 url = json.results[i].site_detail_url
                 a.href = url;
                 a.appendChild(img);
+                var node_name = document.createElement("div");
+                node_name.setAttribute('style', "color:black");
+                var textnode = document.createTextNode(json.results[i].name);
+                node_name.appendChild(textnode);
+                a.appendChild(node_name);
                 //img.onclick = function() {
                   //window.location.href = url;
                 //};
-                node.appendChild(textnode);
+                //node.appendChild(textnode);
                 node.appendChild(a);
                 document.getElementById("recommendList").appendChild(node);
             }
@@ -474,22 +486,28 @@ async function addGamesSearchGenre(genre) {
             //add game list
             var i = 0;
             for (i=0; i<json.results.length; i++){
-                var node = document.createElement("LI");
+                var node = document.createElement("div");
                 node.setAttribute('style', "color:black");
-                var textnode = document.createTextNode(json.results[i].name);
+                node.setAttribute('class','gallery');
+                //var textnode = document.createTextNode();
                 var img = new Image(); 
                 var a = document.createElement('a');
                 img.src = json.results[i].image.small_url;
-                img.setAttribute("height", "100");
-                img.setAttribute("weight", "100");
+                img.setAttribute("height", "300");
+                img.setAttribute("weight", "500");
                 console.log(json.results[i].site_detail_url);
                 url = json.results[i].site_detail_url
                 a.href = url;
                 a.appendChild(img);
+                var node_name = document.createElement("div");
+                node_name.setAttribute('style', "color:black");
+                var textnode = document.createTextNode(json.results[i].name);
+                node_name.appendChild(textnode);
+                a.appendChild(node_name);
                 //img.onclick = function() {
                   //window.location.href = url;
                 //};
-                node.appendChild(textnode);
+                //node.appendChild(textnode);
                 node.appendChild(a);
                 document.getElementById("recommendList").appendChild(node);
             }
