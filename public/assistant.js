@@ -161,8 +161,21 @@ async function addChat(){
                 input = await translate(language_val + "-en", input);
             }
         } 
-        next_question = await sendWatsonAssistantMessage(input);
-        
+
+        const match = input.match(/[\uac00-\ud7af]|[\u1100-\u11ff]|[\u3130-\u318f]|[\ua960-\ua97f]|[\ud7b0-\ud7ff]/g);
+        const match2 = input.match(/[\u4E00-\u9FCC\u3400-\u4DB5\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d]/g);
+        //input == "사회과학원 어학연구소" || input == "社會科學院語學研究所" || input == "(｡◕ ∀ ◕｡)"
+        if(match ? match.length === input.length : false){
+            //Korean
+            next_question = "Sorry I did not understand, can you repeat your answer?";
+        }else if(match2 ? match2.length === input.length : false){
+            //Chinese
+            next_question = "Sorry I did not understand, can you repeat your answer?";
+        }else{
+            next_question = await sendWatsonAssistantMessage(input);
+        }
+        console.log("next_question: " + next_question);
+
         if(language_val != ""){
             next_question = await translate("en-" + language_val, next_question);
             if(is_Google == true){
