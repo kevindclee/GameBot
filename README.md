@@ -7,15 +7,15 @@ This project was Ohio State University Capstone Project for CSE 5914 (Knowledge-
 ## Requirements and Installation
 1. make changes to assistant.js (API key, etc.)
 2. Use `Browserify` to make a distribution js file
-    ```Shell
-    browserify public/assistant.js -s myBundle > public/bundle.js
-    ```
+```Shell
+browserify public/assistant.js -s myBundle > public/bundle.js
+```
 3. Run the server to run http server  
     a. To run the server once,  
-        ```
-        node index.js
-        ```  
+```
+node index.js
+```  
     b. To keep running the server after changes  
-        ```
-        npm run dev
-        ```  
+```
+npm run dev
+```  
