@@ -4,20 +4,18 @@ Adopted IBM Watson Assistant platform. Game data is provided from [Giant Bomb da
 This project was Ohio State University Capstone Project for CSE 5914 (Knowledge-Based Systems) class.
 
 
-## Requirementssteps and Installation
+## Requirements and Installation
 1. make changes to assistant.js (API key, etc.)
 2. Use `Browserify` to make a distribution js file
-```Shell
-browserify public/assistant.js -s myBundle > public/bundle.js
-```
-
-4. Run the server to run http server
-    a. To run the server once,
+    ```Shell
+    browserify public/assistant.js -s myBundle > public/bundle.js
+    ```
+3. Run the server to run http server  
+    a. To run the server once,  
         ```Shell
         node index.js
         ```
-
-    b. To keep running the server after changes
+    b. To keep running the server after changes  
         ```Shell
         npm run dev
         ```
