@@ -12,10 +12,10 @@ This project was Ohio State University Capstone Project for CSE 5914 (Knowledge-
     ```
 3. Run the server to run http server  
     a. To run the server once,  
-        ```Shell
+        ```
         node index.js
         ```  
     b. To keep running the server after changes  
-        ```Shell
+        ```
         npm run dev
         ```  
