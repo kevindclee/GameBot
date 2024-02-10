@@ -12,10 +12,10 @@ browserify public/assistant.js -s myBundle > public/bundle.js
 ```
 3. Run the server to run http server  
     a. To run the server once,  
-```
-node index.js
-```  
+        ```
+        node index.js
+        ```  
     b. To keep running the server after changes  
-```
-npm run dev
-```  
+        ```
+        npm run dev
+        ```  
