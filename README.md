@@ -5,6 +5,7 @@ This project was Ohio State University Capstone Project for CSE 5914 (Knowledge-
 
 ## Overview
 With this Game recommendation application, you can: 
+- By answering each question the GameBot asks, the user gets more refined and customized game recommendations.
 - Get game recommendation based on user's preference such as gaming platform (PC, Playstation, Nintendo Switch, etc.), review ratings, etc.
 - Use preferred language with the GameBot. It supports language translation (`Google Translate API`) where the client can choose to preferred language.
 
